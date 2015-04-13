@@ -1,4 +1,4 @@
-package edu.uncc.cs.kbs.loqr;
+package edu.uncc.cs.loqr;
 
 /**
  * A one dimensional query conjunct. It's fields are public and immutable.

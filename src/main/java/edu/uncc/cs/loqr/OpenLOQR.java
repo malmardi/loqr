@@ -1,7 +1,13 @@
-package edu.uncc.cs.kbs.loqr;
+package edu.uncc.cs.loqr;
+
+
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import fj.data.List;
 import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
 
 /**
  * Run relaxed queries against an ARFF dataset.
@@ -11,11 +17,16 @@ import weka.core.Instances;
  * gradle run -Ptarget=OpenLOQR diabetes.arff
  */
 public class OpenLOQR {
-	public static void main(String[] args) {
+	private static final Logger log = LogManager.getLogger(OpenLOQR.class);
+	public static void main(String[] args) throws Exception {
 		// Validate user input
+		if (args.length == 0) {
+			log.fatal("Need a database (an .arff file) to query.");
+			System.exit(1);
+		}
 		
 		// Open, load and discretize the database
-		Instances insts = null;
+		Instances insts = DataSource.read(args[0]);
 		// Generate rules from the database
 		List<Rule> rules = Associations.associate(insts);
 		

@@ -26,7 +26,8 @@ dependencies {
 
     // multimaps and many other tools
     compile "com.google.guava:guava:18.0"
-
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.2'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.2'
     compile 'junit:junit:4.12'
     // Persistent Data Structures for sane transactional semantics
     compile 'org.functionaljava:functionaljava-java8:4.2'
@@ -36,6 +37,8 @@ dependencies {
 run {
     // Allow reading from stdin
     standardInput = System.in
-    main "edu.uncc.cs.kbs.$target"
+    systemProperty "log4j.configurationFile", "log4j2.xml"
+    args System.getProperty("exec.args").split()
+    main "edu.uncc.cs.loqr.$target"
 }
 

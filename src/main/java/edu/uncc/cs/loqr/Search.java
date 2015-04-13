@@ -1,4 +1,4 @@
-package edu.uncc.cs.kbs.loqr;
+package edu.uncc.cs.loqr;
 
 
 import fj.data.List;
