@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'application'
+    id 'maven'
+}
+
+// Meta information
+mainClassName = System.getProperty("mainClass")
+version = "0.0.1"
+group = "edu.uncc"
+
+// Dependencies and where to get them (some are nonstandard)
+repositories {
+    mavenCentral()
+    flatDir {dirs "lib"}
+}
+
+dependencies {
+    // Machine learning
+    compile 'com.googlecode.jcsv:jcsv:1.4.0'
+    compile 'nz.ac.waikato.cms.weka:weka-stable:3.6.6'
+
+    // Approximate String Matching
+    compile 'org.apache.commons:commons-lang3:3.3.2'
+
+    // multimaps and many other tools
+    compile "com.google.guava:guava:18.0"
+
+    compile 'junit:junit:4.12'
+    // Persistent Data Structures for sane transactional semantics
+    compile 'org.functionaljava:functionaljava-java8:4.2'
+
+}
+
+run {
+    // Allow reading from stdin
+    standardInput = System.in
+    main "edu.uncc.cs.kbs.$target"
+}
+
