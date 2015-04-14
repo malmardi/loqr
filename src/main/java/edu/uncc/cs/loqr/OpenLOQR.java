@@ -32,7 +32,7 @@ public class OpenLOQR {
 		
 		// Prompt the user and get a query definition
 		Attribute preg = insts.attribute("preg");
-		Query q = new Query(new Conjunct(preg, 0));
+		Query q = new Query(new Conjunct(preg, Op.EQ, 0));
 		// Execute a relaxed query against the database
 		Instances results = Search.relaxed(q, insts, rules);
 		

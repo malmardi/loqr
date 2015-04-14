@@ -21,6 +21,7 @@ public class Query {
 	 * @return
 	 */
 	public static Query parse(String text) {
-		return new Query(List.nil());
+		
+		return new Query();
 	}
 }
