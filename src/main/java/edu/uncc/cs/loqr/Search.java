@@ -2,7 +2,7 @@ package edu.uncc.cs.loqr;
 
 
 import fj.data.List;
-import weka.core.FastVector;
+import weka.core.Instance;
 import weka.core.Instances;
 
 public class Search {
@@ -15,7 +15,16 @@ public class Search {
 	 * @return
 	 */
 	public static Instances rigid(Query query, Instances insts) {
-		return new Instances("Example", new FastVector(), 0);
+		Instances out = new Instances(insts, 16);
+		for (int i=0; i < insts.numInstances(); i++) {
+			Instance inst = insts.instance(i);
+			boolean retain = true;
+			for (Conjunct conj : query.conjuncts) {
+				retain &= inst.value(conj.attr) == conj.value;
+			}
+			if (retain) out.add(inst);
+		}
+		return out;
 	}
 	
 	/**

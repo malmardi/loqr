@@ -34,11 +34,13 @@ dependencies {
 
 }
 
-run {
+//run {
     // Allow reading from stdin
-    standardInput = System.in
-    systemProperty "log4j.configurationFile", "log4j2.xml"
-    args System.getProperty("exec.args").split()
-    main "edu.uncc.cs.loqr.$target"
-}
+//    standardInput = System.in
+//    systemProperty "log4j.configurationFile", "log4j2.xml"
+//    def argprop = System.getProperty("exec.args") 
+//    args (argprop ? argprop.split() : [])
+//    println sourceSets.main.runtimeClasspath.asPath
+//    main "edu.uncc.cs.loqr.$target"
+//}
 

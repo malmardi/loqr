@@ -9,6 +9,9 @@ public class Query {
 	public Query(List<Conjunct> conjuncts) {
 		this.conjuncts = conjuncts;
 	}
+	public Query(Conjunct... conjuncts) {
+		this.conjuncts = List.list(conjuncts);
+	}
 	
 	/**
 	 * Create a new query from a user-input string, such as the following

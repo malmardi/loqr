@@ -1,11 +1,11 @@
 package edu.uncc.cs.loqr;
 
-
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import fj.data.List;
+import static fj.data.List.list;
+import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -31,7 +31,8 @@ public class OpenLOQR {
 		List<Rule> rules = Associations.associate(insts);
 		
 		// Prompt the user and get a query definition
-		Query q = new Query(List.nil());
+		Attribute preg = insts.attribute("preg");
+		Query q = new Query(new Conjunct(preg, 0));
 		// Execute a relaxed query against the database
 		Instances results = Search.relaxed(q, insts, rules);
 		
