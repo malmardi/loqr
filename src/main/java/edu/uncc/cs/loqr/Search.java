@@ -1,11 +1,15 @@
 package edu.uncc.cs.loqr;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import fj.data.List;
 import weka.core.Instance;
 import weka.core.Instances;
 
 public class Search {
+	private static final Logger log = LogManager.getLogger(Search.class);
 	/**
 	 * Perform a rigid Query against Instances.
 	 * 

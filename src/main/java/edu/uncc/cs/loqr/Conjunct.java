@@ -1,7 +1,5 @@
 package edu.uncc.cs.loqr;
 
-import java.util.Optional;
-
 import weka.core.Attribute;
 
 /**
@@ -15,5 +13,10 @@ public final class Conjunct {
 		this.attr = attr;
 		this.op = op;
 		this.value = value;
+	}
+	@Override
+	public String toString() {
+		return String.format("Conjunct [attr=%s, op=%s, value=%s]", attr, op,
+				value);
 	}
 }
