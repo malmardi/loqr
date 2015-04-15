@@ -20,7 +20,7 @@ public class Search {
 			Instance inst = insts.instance(i);
 			boolean retain = true;
 			for (Conjunct conj : query.conjuncts) {
-				retain &= inst.value(conj.attr) == conj.value;
+				retain &= conj.op.func.apply(inst.value(conj.attr), (double) conj.value);
 			}
 			if (retain) out.add(inst);
 		}
