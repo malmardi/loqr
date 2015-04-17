@@ -33,7 +33,7 @@ public class Query {
 	 * @param text
 	 * @return
 	 */
-	public static Query parse(String text, Instances insts, Discretize disc) {
+	public static Query parse(String text, Instances insts) {
 		Pattern pat = Pattern.compile("\\[([A-Za-z]+)(<|<=|==|>|>=|!=)(\\d+(\\.\\d+)?)\\]\\^?");
 		Matcher m = pat.matcher(text);
 		List<Conjunct> conjuncts = List.nil();
@@ -41,12 +41,12 @@ public class Query {
 		
 		while (m.find()) {
 			Attribute attr = insts.attribute(m.group(1));
-			int block = discretize(attr,
+			/*int block = discretize(attr,
 					disc,
-					Double.parseDouble(m.group(3)));
+					Double.parseDouble(m.group(3)));*/
 			conjuncts = conjuncts.cons(new Conjunct(attr,
 					Op.read(m.group(2)),
-					block));
+					Double.parseDouble(m.group(3))));
 		}
 		return new Query(conjuncts);
 	}

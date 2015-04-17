@@ -40,7 +40,10 @@ public class Search {
 	 * @param rules
 	 * @return
 	 */
-	public static Instances relaxed(Query query, Instances insts, List<Rule> rules) {
+	public static Instances relaxed(Query query, Instances insts) {
+
+		// Generate rules from the database
+		List<Rule> rules = Associations.associate(insts);
 		
 		/*
 		 * Here you can expect to use the rule similarity metric:

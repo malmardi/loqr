@@ -31,17 +31,13 @@ public class OpenLOQR {
 		Instances insts = DataSource.read(args[0]);
 		insts.setClassIndex(insts.attribute("class").index());
 		disc.setInputFormat(insts);
-		insts = Filter.useFilter(insts, disc);
+		//insts = Filter.useFilter(insts, disc);
 		
-		// Generate rules from the database
-		List<Rule> rules = Associations.associate(insts);
 		
-		// Prompt the user and get a query definition
-		Attribute preg = insts.attribute("preg");
 		//Query q = new Query(new Conjunct(preg, Op.LT, 4));
-		Query q = Query.parse("[preg<=4]", insts, disc);
+		Query q = Query.parse("[preg<=4]", insts);
 		// Execute a relaxed query against the database
-		Instances results = Search.relaxed(q, insts, rules);
+		Instances results = Search.relaxed(q, insts);
 		
 		// Tell the user the results
 		System.out.println(results);

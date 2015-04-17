@@ -8,8 +8,8 @@ import weka.core.Attribute;
 public final class Conjunct {
 	public final Attribute attr;
 	public final Op op;
-	public final int value;
-	public Conjunct(Attribute attr, Op op, int value) {
+	public final double value;
+	public Conjunct(Attribute attr, Op op, double value) {
 		this.attr = attr;
 		this.op = op;
 		this.value = value;
