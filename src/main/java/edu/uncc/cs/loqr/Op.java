@@ -34,4 +34,33 @@ public class Op {
 	public String toString() {
 		return name;
 	}
+	
+	/**
+	 * 
+	 * @param op1
+	 * @param op2
+	 * @return true of op1 and op2 are same direction operators e.g., "<" & "<="
+	 */
+	public static boolean sameDir(String op1, String op2) {
+		if(((op1.equals(Op.LT.name) || op1.equals(Op.LE.name)) && 
+				(op2.equals(Op.LT.name) || op2.equals(Op.LE.name))) || 
+				((op1.equals(Op.GT.name) || op1.equals(Op.GE.name)) && 
+						(op2.equals(Op.GT.name) || op2.equals(Op.GE.name))))
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * 
+	 * @param op
+	 * @return true if op is an equality operator i.e., != or ==
+	 */
+	public static boolean isEquality(String op) {
+		if(op.equals(Op.EQ.name) || 
+				op.equals(Op.NE.name))
+			return true;
+		else
+			return false;
+	}
 }

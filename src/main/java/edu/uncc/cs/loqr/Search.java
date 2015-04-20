@@ -45,10 +45,18 @@ public class Search {
 		// Generate rules from the database
 		List<Rule> rules = Associations.associate(insts);
 		
+		List<Query> Qs = List.nil();
+		for(Rule r : rules) {
+			Qs.cons(new Query(r.antecedents.append(r.consequents)));
+		}
+		
+		// get nearest query to original query
+		Query Qr = Query.getNearest(query, Qs, insts);		
+		
 		/*
-		 * Here you can expect to use the rule similarity metric:
-		 * some_rule.similarity(other_rule);
+		 * TODO: make required relaxation to original query constraints using nearest rule
 		 */
+		
 		return rigid(query, insts);
 	}
 }

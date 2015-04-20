@@ -84,4 +84,176 @@ public class Query {
 			return start;
 		}
 	}
+	
+	/**
+	 * Measure distance of query Qi with original query Q to determine 
+	 * nearest one Qr
+	 * Notes
+	 * ======
+	 * 1. If Q is: Price ≤ $2, 000 ^ Display ≥ 17 ^ Weight ≤ 3 lbs and 
+	 * Qi is: Price ≤ $2, 300 ^ Cpu < 2.1 GHz ^ Display ≤ 13 then Cpu 
+	 * is ignored as it doesn't appear in Q 
+	 * so final Qr will be: Price ≤ $2, 300 ^ Display ≤ 13
+	 * 	 
+	 * Examples
+	 * =========
+	 * Q --> Price ≤ $2,000 ^ Display ≥ 17 ^ CPU ≥ 2.5 GHz ^ Weight ≤ 3 lbs ^ HDD ≥ 60GB
+	 * Q1 --> Price ≤ $2,900 ^ Display ≥ 18 ^ Weight ≤ 4 lbs ^ CPU ≥ 2.5 GHz
+	 * Q2 --> Price ≥ $3,500 ^ CPU ≥ 2.5 GHz
+	 * Q3 -->  Price ≤ $2,000 ^ HDD ≥ 60 ^ Weight ≤ 4 lbs^ CPU ≥ 2.5 GHz
+	 * Q4 --> Brand == "Sony" ^ CPU ≥ 2.5 GHz
+	 * @param insts 
+	 * @param Q: original user query
+	 * @param Qs: list of queries learned from domain knowledge
+	 * @param insts: instances from the dataset
+	 * @return Qr: nearest rule to original query
+	 */
+	public static Query getNearest(Query Q, List<Query> Qs, Instances insts) {
+		// TODO Auto-generated method stub
+		double min_dist = Double.MAX_VALUE;
+		Query Qr = null;
+		for(Query Qi : Qs) {
+			// TODO: drop conjuncts in Qs not in Q
+			double d = Q.distance(Qi, insts);
+			min_dist = d<=min_dist?d:min_dist;
+		}
+		
+		return Qr;
+	}
+	
+	/**
+	 * What is it?
+	 * ============
+	 * loqr uses nearest-neighbor techniques to find the learned 
+	 * query that is the most similar to the failing query.
+	 * Assumptions
+	 * ============
+	 * Attributes are either nominal or numeric
+	 * Nominal attributes use only == or != operators
+	 * Given values are within permitted ranges as it appears in the dataset
+	 * 
+	 * Notes
+	 * ======
+	 *  nominal attributes distance=1 if they are not same operator and same values 
+	 *  numeric attributes distance=1 if operator == or != and not same values
+	 *    
+	 * Examples
+	 * =========
+	 * Q: preg==3 && Qi: pre>3 --> distance = 0 
+	 * Q: preg!=3 && Qi: pre<3 --> distance = 0
+	 * Q: preg!=3 && Qi: pre<3 --> distance = 0 
+	 *  
+	 * @param other
+	 * @param insts 
+	 * @return some distance measure between two queries
+	 */
+	public double distance(Query Q, Instances insts) {
+		double dist = 0.0;
+		for(Conjunct co : conjuncts) {
+			boolean found = false;
+			double min = Double.NEGATIVE_INFINITY;
+			double max = Double.POSITIVE_INFINITY;
+			
+			double Q_range_min = Double.NEGATIVE_INFINITY;
+			double Q_range_max = Double.POSITIVE_INFINITY;
+			
+			if(co.attr.isNumeric()) {
+				min = insts.attributeStats(co.attr.index()).numericStats.min;
+				max = insts.attributeStats(co.attr.index()).numericStats.max;
+				
+				if(co.op.name.equals(Op.GE.name)) {
+					Q_range_min = co.value;
+					Q_range_max = max;
+				}
+				else if(co.op.name.equals(Op.GT.name)) {
+					Q_range_min = co.value+1;
+					Q_range_max = max;
+				}
+				else if(co.op.name.equals(Op.LE.name)) {
+					Q_range_min = min;
+					Q_range_max = co.value;
+				}
+				else if(co.op.name.equals(Op.LT.name)) {
+					Q_range_min = min;
+					Q_range_max = co.value-1;
+				}
+				else if(co.op.name.equals(Op.LT.name)) {
+					Q_range_min = min-1;
+					Q_range_max = co.value;
+				}
+			}
+			
+			for(Conjunct c : Q.conjuncts) {
+				if(c.attr.name()==co.attr.name()) {
+					found = true;
+					if(c.attr.isNominal()) { // discrete attribute 
+						if(c.op.equals(co.op) && 
+								c.value==co.value)
+							dist += 0.0;
+						else
+							dist += 1.0;
+					}
+					else if(c.attr.isNumeric()) {
+						// numeric attributes distance=1 if operator == or != and not same values
+						if(Op.isEquality(c.op.name) || 
+								Op.isEquality(co.op.name)) {
+							if(co.op.name.equals(c.op.name) && 
+									co.value==c.value)
+								dist += 0.0;
+							else
+								dist += 1.0;
+						}
+						else { // >,>=.<, <=							
+							double Qi_range_min = Double.NEGATIVE_INFINITY;
+							double Qi_range_max = Double.POSITIVE_INFINITY;
+							
+							if((c.op.name.equals(Op.GE.name) || 
+									c.op.name.equals(Op.GT.name)) && 
+									c.value<max) {
+								if(c.op.name.equals(Op.GT.name))
+									Qi_range_min = c.value+1;
+								else
+									Qi_range_min = c.value;			
+								
+								if(Op.sameDir(c.op.name, co.op.name)) {
+									Qi_range_max = max;
+								}
+								else if(c.value<Q_range_max) {
+									Qi_range_max = Q_range_max;
+								}
+							}
+							else if((c.op.name.equals(Op.LE.name) || 
+									c.op.name.equals(Op.LT.name)) && 
+									c.value>min) {
+								if(c.op.name.equals(Op.LT.name))
+									Qi_range_max = c.value-1;
+								else
+									Qi_range_max = c.value;			
+								
+								if(Op.sameDir(c.op.name, co.op.name)) {
+									Qi_range_min = min;
+								}
+								else if(c.value>Q_range_min) {
+									Qi_range_min = Q_range_min;
+								}
+							}
+							if(Qi_range_max!=Double.POSITIVE_INFINITY && 
+									Qi_range_min!=Double.NEGATIVE_INFINITY) {
+								dist += Math.abs((Q_range_max-Q_range_min)-(Qi_range_max-Qi_range_min))/(max-min);
+							}
+							else
+								dist += 1.0;
+						}
+					}
+					else // unsupported attribute type 
+						dist += 1.0;
+					
+					break;
+				}
+			}
+			if(found==false) // penalize Qi for missing attributes
+				dist += 1.0;
+		}
+		return dist;
+	}
 }
