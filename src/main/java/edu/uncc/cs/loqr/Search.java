@@ -43,7 +43,7 @@ public class Search {
 	public static Instances relaxed(Query query, Instances insts) {
 
 		// Generate rules from the database
-		List<Rule> rules = Associations.associate(insts);
+		List<Rule> rules = Associations.associate(query, insts);
 		
 		/*
 		 * Here you can expect to use the rule similarity metric:

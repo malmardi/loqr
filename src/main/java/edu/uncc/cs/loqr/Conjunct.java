@@ -16,7 +16,7 @@ public final class Conjunct {
 	}
 	@Override
 	public String toString() {
-		return String.format("Conjunct [attr=%s, op=%s, value=%s]", attr, op,
+		return String.format("[%s %s %s]", attr.name(), op,
 				value);
 	}
 }
