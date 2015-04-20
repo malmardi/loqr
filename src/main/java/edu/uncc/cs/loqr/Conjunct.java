@@ -5,18 +5,32 @@ import weka.core.Attribute;
 /**
  * A one dimensional query conjunct. It's fields are public and immutable.
  */
+
+//mamoun sds;ldsd
 public final class Conjunct {
-	public final Attribute attr;
-	public final Op op;
-	public final double value;
+
+	//Removed final for the following parameters
+	public Attribute attr;
+	public Op op;
+	public double value;
 	public Conjunct(Attribute attr, Op op, double value) {
 		this.attr = attr;
 		this.op = op;
 		this.value = value;
 	}
-	@Override
+
+	//copy constructor
+	public Conjunct(Conjunct another) {
+		this.attr=another.attr;
+		this.op=another.op;
+		this.value=another.value;
+	}
+	
 	public String toString() {
 		return String.format("Conjunct [attr=%s, op=%s, value=%s]", attr, op,
 				value);
 	}
+	
+	
+	
 }
