@@ -10,9 +10,9 @@ import weka.core.Attribute;
 public final class Conjunct {
 
 	//Removed final for the following parameters
-	public Attribute attr;
-	public Op op;
-	public double value;
+	public final Attribute attr;
+	public final Op op;
+	public final double value;
 	public Conjunct(Attribute attr, Op op, double value) {
 		this.attr = attr;
 		this.op = op;
