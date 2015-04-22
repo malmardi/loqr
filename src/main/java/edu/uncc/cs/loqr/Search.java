@@ -43,7 +43,7 @@ public class Search {
 	public static Instances relaxed(Query query, Instances insts) {
 
 		// Generate rules from the database
-		List<Rule> rules = Associations.associate(insts);
+		List<Rule> rules = Associations.associate(query, insts);
 		
 		List<Query> Qs = List.nil();
 		for(Rule r : rules) {

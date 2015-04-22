@@ -21,6 +21,10 @@ public class Op {
 	public static final Op GT = new Op(">", (a, b) -> a > b);
 	public static final Op NE = new Op("!=",(a, b) -> a != b);
 	
+	static {
+		ops.put("=", EQ); // A one-equals synonym
+	}
+	
 	private Op(String name, BiFunction<Double, Double, Boolean> func) {
 		this.name = name;
 		this.func = func;

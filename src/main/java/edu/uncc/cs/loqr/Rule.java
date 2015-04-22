@@ -21,4 +21,10 @@ public class Rule {
 	public double similarity(Rule other) {
 		return 0.0;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("Rule [antecedents=%s, consequents=%s]",
+				antecedents, consequents);
+	}
 }

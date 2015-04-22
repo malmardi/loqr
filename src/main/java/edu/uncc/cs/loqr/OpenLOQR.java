@@ -40,6 +40,6 @@ public class OpenLOQR {
 		Instances results = Search.relaxed(q, insts);
 		
 		// Tell the user the results
-		System.out.println(results);
+		//System.out.println(results);
 	}
 }
