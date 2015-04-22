@@ -37,24 +37,31 @@ public class Rule {
 			{
 				if(c1.attr.name()==c2.attr.name())//Discrete
 					if(c1.op.name.equals(Op.EQ.name) && c2.op.name.equals(Op.EQ.name))
-						C3.cons(new Conjunct(c1));
+						C3 = List.cons(new Conjunct(c1), C3);
 					else if((c1.op.name.equals(Op.LE.name)||c1.op.name.equals(Op.LT.name))&&(c2.op.name.equals(Op.LE.name)||c2.op.name.equals(Op.LT.name)))//Both LT or LE
 						if(c2.value <= c1.value)//Choose the upper limit 
-							C3.cons(new Conjunct(c1));
+							C3 = List.cons(new Conjunct(c1), C3);
 						else 
-							C3.cons(new Conjunct(c2));
+							C3 = List.cons(new Conjunct(c2), C3);
 					else if((c1.op.name.equals(Op.GE.name)||c1.op.name.equals(Op.GT.name))&&(c2.op.name.equals(Op.GE.name)||c2.op.name.equals(Op.GT.name)))//Both GE or GT
 						if(c2.value <= c1.value)//Choose the lower
 							C3 = List.cons(new Conjunct(c2), C3);
 						else 
-							C3.cons(new Conjunct(c1));		
+							C3 = List.cons(new Conjunct(c1), C3);		
 					else if((c1.op.name.equals(Op.GE.name)||c1.op.name.equals(Op.GT.name))&&(c2.op.name.equals(Op.LE.name)||c2.op.name.equals(Op.LT.name)))//Different types of inequalities
 						if(c1.value<=c2.value)
-							C3.cons(new Conjunct(c1));//to be changed [Interval]
+						{
+							C3 = List.cons(new Conjunct(c1), C3);
+							C3 = List.cons(new Conjunct(c2), C3);
+						}
 						else ;
 					else if((c1.op.name.equals(Op.LE.name)||c1.op.name.equals(Op.LT.name))&&(c2.op.name.equals(Op.GE.name)||c2.op.name.equals(Op.GT.name)))//Different types of inequalities
 						if(c1.value>=c2.value)
-							C3.cons(new Conjunct(c1));//to be changed [Interval]
+						{
+							C3 = List.cons(new Conjunct(c1), C3);
+							C3 = List.cons(new Conjunct(c2), C3);
+						}
+							
 							
 				
 			}
