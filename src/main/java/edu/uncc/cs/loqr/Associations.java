@@ -31,7 +31,7 @@ public class Associations {
 				Instances thresholded = applyConjunct(conj, insts);
 				tree.buildClassifier(thresholded);
 				System.out.println(tree.prefix());
-				rules = rules.append(extractRules(thresholded, tree));
+				rules = rules.append(extractRules(thresholded, tree, conj));
 				
 				//System.out.println(tree.toSource("Associations"));
 			} catch (Exception e) {
@@ -40,7 +40,7 @@ public class Associations {
 			}
 		}
 		System.out.println(rules);
-		return List.nil();
+		return rules;
 	}
 	
 	/**
@@ -78,13 +78,13 @@ public class Associations {
 	 * @param tree
 	 * @return
 	 */
-	private static List<Rule> extractRules(Instances insts, J48 tree) {
+	private static List<Rule> extractRules(Instances insts, J48 tree, Conjunct conj) {
 		List<String> lines = List.iterableList(
 				Arrays.asList(tree.toString().split("\n")))
 				.drop(3); // Skip the header
 		log.debug(tree);
 		
-		return extractRules(insts, lines, List.nil());
+		return extractRules(insts, lines, List.nil(), conj);
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class Associations {
 	 * @param context
 	 * @return
 	 */
-	private static List<Rule> extractRules(Instances insts, List<String> lines, List<Conjunct> context) {
+	private static List<Rule> extractRules(Instances insts, List<String> lines, List<Conjunct> context, Conjunct conj) {
 		if (lines.isEmpty()) {
 			return List.nil();
 		}
@@ -138,16 +138,16 @@ public class Associations {
 
 			// Add our rule only if we are at a leaf
 			String leaf = mat.group("leaf");
-			if (leaf != null) {
-				rules = List.single(new Rule(context, List.single(new Conjunct(
+			if (leaf != null && leaf.equals("0")==false) {
+				rules = List.single(new Rule(context.cons(conj), List.single(new Conjunct(
 						insts.classAttribute(),
 						Op.EQ,
 						Double.parseDouble(leaf)
-						))));
+						))));				
 			}
 		}
 		
 		// Then add the rest of the lines in this new context
-		return rules.append(extractRules(insts, lines.tail(), context));
+		return rules.append(extractRules(insts, lines.tail(), context, conj));
 	}
 }

@@ -115,7 +115,10 @@ public class Query {
 		for(Query Qi : Qs) {
 			// TODO: drop conjuncts in Qs not in Q
 			double d = Q.distance(Qi, insts);
-			min_dist = d<=min_dist?d:min_dist;
+			if(d<=min_dist) {
+				min_dist = d;
+				Qr = Qi;
+			}
 		}
 		
 		return Qr;
@@ -255,5 +258,54 @@ public class Query {
 				dist += 1.0;
 		}
 		return dist;
+	}
+	
+	public static List<Conjunct> relaxation(List<Conjunct> C1, List<Conjunct> C2)
+	{
+		
+		List<Conjunct> C3 = List.nil();
+		
+		for(Conjunct c1 : C1) 
+		{
+			for(Conjunct c2 : C2) 
+			{
+				if(c1.attr.name()==c2.attr.name()) {
+					if((c1.op.name.equals(Op.EQ.name) && 
+							c2.op.name.equals(Op.EQ.name) || 
+							(c1.op.name.equals(Op.NE.name) && 
+									c2.op.name.equals(Op.NE.name)) && 
+							c1.value==c2.value))//Discrete
+						C3 = C3.cons(c1);
+					else if((c1.op.name.equals(Op.LE.name)||c1.op.name.equals(Op.LT.name))&&(c2.op.name.equals(Op.LE.name)||c2.op.name.equals(Op.LT.name)))//Both LT or LE
+						if(c2.value <= c1.value)//Choose the upper limit 
+							C3 = C3.cons(c1);
+						else 
+							C3 = C3.cons(c2);
+					else if((c1.op.name.equals(Op.GE.name)||c1.op.name.equals(Op.GT.name))&&(c2.op.name.equals(Op.GE.name)||c2.op.name.equals(Op.GT.name)))//Both GE or GT
+						if(c2.value <= c1.value)//Choose the lower
+							C3 = C3.cons(c2);
+						else 
+							C3 = C3.cons(c1);		
+					else if((c1.op.name.equals(Op.GE.name)||c1.op.name.equals(Op.GT.name))&&
+							(c2.op.name.equals(Op.LE.name)||c2.op.name.equals(Op.LT.name))) {//Different types of inequalities
+						if(c1.value<=c2.value)
+						{
+							C3 = C3.cons(c1);
+							C3 = C3.cons(c2);
+						}
+					}
+					else if((c1.op.name.equals(Op.LE.name)||c1.op.name.equals(Op.LT.name))&&
+							(c2.op.name.equals(Op.GE.name)||c2.op.name.equals(Op.GT.name)) && 
+							(c1.value>=c2.value))//Different types of inequalities
+					{
+						C3 = C3.cons(c1);
+						C3 = C3.cons(c2);
+					}
+				}
+			}
+		}
+	
+		
+		return C3;
 	}
 }

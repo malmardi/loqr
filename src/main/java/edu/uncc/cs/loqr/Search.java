@@ -47,12 +47,16 @@ public class Search {
 		
 		List<Query> Qs = List.nil();
 		for(Rule r : rules) {
-			Qs.cons(new Query(r.antecedents.append(r.consequents)));
+			Qs = Qs.cons(new Query(r.antecedents));
 		}
 		
 		// get nearest query to original query
-		Query Qr = Query.getNearest(query, Qs, insts);		
+		Query Qr = Query.getNearest(query, Qs, insts);
+		System.out.println(Qr.conjuncts.toString());
 		
+		// Relax
+		Query relaxed = new Query(Query.relaxation(query.conjuncts, Qr.conjuncts));
+		System.out.println(relaxed.conjuncts.toString());
 		/*
 		 * TODO: make required relaxation to original query constraints using nearest rule
 		 */
