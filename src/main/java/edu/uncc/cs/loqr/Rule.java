@@ -45,7 +45,7 @@ public class Rule {
 							C3.cons(new Conjunct(c2));
 					else if((c1.op.name.equals(Op.GE.name)||c1.op.name.equals(Op.GT.name))&&(c2.op.name.equals(Op.GE.name)||c2.op.name.equals(Op.GT.name)))//Both GE or GT
 						if(c2.value <= c1.value)//Choose the lower
-							C3.cons(new Conjunct(c2));
+							C3 = List.cons(new Conjunct(c2), C3);
 						else 
 							C3.cons(new Conjunct(c1));		
 					else if((c1.op.name.equals(Op.GE.name)||c1.op.name.equals(Op.GT.name))&&(c2.op.name.equals(Op.LE.name)||c2.op.name.equals(Op.LT.name)))//Different types of inequalities
