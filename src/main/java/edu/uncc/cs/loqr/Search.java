@@ -40,10 +40,10 @@ public class Search {
 	 * @param rules
 	 * @return
 	 */
-	public static Instances relaxed(Query query, Instances insts) {
+	public static Instances relaxed(Query Q, Instances insts) {
 
 		// Generate rules from the database
-		List<Rule> rules = Associations.associate(query, insts);
+		List<Rule> rules = Associations.associate(Q, insts);
 		
 		List<Query> Qs = List.nil();
 		for(Rule r : rules) {
@@ -51,16 +51,16 @@ public class Search {
 		}
 		
 		// get nearest query to original query
-		Query Qr = Query.getNearest(query, Qs, insts);
+		Query Qr = Query.nearest(Q, Qs, insts);
 		System.out.println(Qr.conjuncts.toString());
 		
 		// Relax
-		Query relaxed = new Query(Query.relaxation(query.conjuncts, Qr.conjuncts));
+		Query relaxed = Query.relax(Q, Qr);
 		System.out.println(relaxed.conjuncts.toString());
 		/*
 		 * TODO: make required relaxation to original query constraints using nearest rule
 		 */
 		
-		return rigid(query, insts);
+		return rigid(Q, insts);
 	}
 }

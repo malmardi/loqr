@@ -108,7 +108,7 @@ public class Query {
 	 * @param insts: instances from the dataset
 	 * @return Qr: nearest rule to original query
 	 */
-	public static Query getNearest(Query Q, List<Query> Qs, Instances insts) {
+	public static Query nearest(Query Q, List<Query> Qs, Instances insts) {
 		// TODO Auto-generated method stub
 		double min_dist = Double.MAX_VALUE;
 		Query Qr = null;
@@ -260,14 +260,14 @@ public class Query {
 		return dist;
 	}
 	
-	public static List<Conjunct> relaxation(List<Conjunct> C1, List<Conjunct> C2)
+	public static Query relax(Query Q, Query Qr)
 	{
 		
 		List<Conjunct> C3 = List.nil();
 		
-		for(Conjunct c1 : C1) 
+		for(Conjunct c1 : Q.conjuncts) 
 		{
-			for(Conjunct c2 : C2) 
+			for(Conjunct c2 : Qr.conjuncts) 
 			{
 				if(c1.attr.name()==c2.attr.name()) {
 					if((c1.op.name.equals(Op.EQ.name) && 
@@ -306,6 +306,6 @@ public class Query {
 		}
 	
 		
-		return C3;
+		return new Query(C3);
 	}
 }
