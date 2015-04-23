@@ -7,6 +7,7 @@ An implementation of [Muslea's LOQR algorithm](http://webpages.uncc.edu/ras/Musl
 - Open a terminal, cd to the loqr repository (not gradle)
 - Execute `path/to/gradle/bin/gradle run`, changing the path as necessary so that you call the gradle binary
  - It's possible to use other tables, but the simplest way (using gradle) assumes the table is `diabetes.arff`.
+
 # Target Data
 This program was developed for specific target data: the Pima Indians Diabetes Database, included as diabetes.arff in the root folder of the project.
 
