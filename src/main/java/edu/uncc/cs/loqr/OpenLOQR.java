@@ -20,15 +20,18 @@ import weka.filters.supervised.attribute.Discretize;
 public class OpenLOQR {
 	private static final Logger log = LogManager.getLogger(OpenLOQR.class);
 	public static void main(String[] args) throws Exception {
+		String filename;
 		// Validate user input
 		if (args.length == 0) {
-			log.fatal("Need a database (an .arff file) to query.");
-			System.exit(1);
+			log.info("No .arff specified. Using diabetes.arff.");
+			filename = "diabetes.arff";
+		} else {
+			filename = args[0];
 		}
 		
 		// Open, load and discretize the database
 		Discretize disc = new Discretize();
-		Instances insts = DataSource.read(args[0]);
+		Instances insts = DataSource.read(filename);
 		insts.setClassIndex(insts.attribute("class").index());
 		disc.setInputFormat(insts);
 		//insts = Filter.useFilter(insts, disc);
