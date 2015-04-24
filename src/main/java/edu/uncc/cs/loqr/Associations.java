@@ -60,7 +60,7 @@ public class Associations {
 	 */
 	private static Instances applyConjunct(Conjunct conj, Instances insts) throws Exception {
 		// Prepare the output matrix
-		Instances outs = new Instances(insts);
+		Instances outs = new Instances(insts, insts.numInstances());
 		outs.setClass(conj.attr);
 		
 		// For every row
@@ -90,7 +90,7 @@ public class Associations {
 		List<String> lines = List.iterableList(
 				Arrays.asList(tree.toString().split("\n")))
 				.drop(3); // Skip the header
-		log.debug(tree);
+		System.out.println(tree);
 		
 		return extractRules(insts, lines, List.nil(), conj);
 	}
