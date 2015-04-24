@@ -2,6 +2,12 @@
 An implementation of [Muslea's LOQR algorithm](http://webpages.uncc.edu/ras/Muslea-paper.pdf) (A class project)
 
 ## Running the Project
+
+### The easy way:
+- Download the [Jar](https://www.dropbox.com/s/rga15aw1r4uxwen/loqr.jar?dl=0) and the [target data](https://github.com/SeanTater/loqr/raw/master/diabetes.arff)
+- Run the jar using Java 8 (version is importrant!):  `java -jar loqr.jar`
+
+### The harder way
 - Download and unpack [Gradle](https://services.gradle.org/distributions/gradle-2.3-all.zip) (for dependencies)
 - Download and unpack [the zipfile containing the latest source](https://github.com/SeanTater/loqr/archive/master.zip).
 - Open a terminal, cd to the loqr repository (not gradle)
@@ -31,8 +37,8 @@ The LOQR system expects queries to have a specific format, as given in the examp
 | varname    | attribute ([a-z]+) | `preg`, `plas`, `pres`, `skin`, `insu`, `mass`, `pedi`, or `age`
 | op         | symbol             | `<`, `<=`, `==`, `!=`, `>=`, or `>`
 | value      | numeric or string  | Continuous attributes: `3`, `-7`, `12.92`, otherwise any string without a ]
-| conjunct   | rule               | `[preg <= 4]`, `[mass > 33]`
-| query      | list of conjuncts  | `[preg <= 4]^[preg > 1]`, `[mass > 33]^[preg != 2]^[age < 55]`
+| conjunct   | rule               | `[preg<=4]`, `[mass>33]`
+| query      | list of conjuncts  | `[preg<=4]^[preg>1]`, `[mass>33]^[preg!=2]^[age<55]`
 
 # Development notes:
 - [ID3 Reference](http://www.cis.temple.edu/~giorgio/cis587/readings/id3-c45.html)
