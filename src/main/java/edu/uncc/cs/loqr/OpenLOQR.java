@@ -22,20 +22,24 @@ import weka.filters.supervised.attribute.Discretize;
 public class OpenLOQR {
 	private static final Logger log = LogManager.getLogger(OpenLOQR.class);
 	public static void main(String[] args) throws Exception {
+		String filename;
 		// Validate user input
 		if (args.length == 0) {
-			log.fatal("Need a database (an .arff file) to query.");
-			System.exit(1);
+			log.info("No .arff specified. Using diabetes.arff.");
+			filename = "diabetes.arff";
+		} else {
+			filename = args[0];
 		}
 		
 		// Open, load the database
-		Instances insts = DataSource.read(args[0]);
+		Instances insts = DataSource.read(filename);
 		insts.setClassIndex(insts.attribute("class").index());
 		
 		// get query from user
 		Scanner in = new Scanner(System.in);
-		System.out.println("Enter your query (e.g. [preg<=4]^[plas<=20]: ");
+		System.out.println("Enter your query (e.g. [preg<=4]^[plas<=20]): ");
 		String query = in.next();
+		in.close();
 		Query q = Query.parse(query, insts);
 		
 		// execute query against the database, relax if needed
