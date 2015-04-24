@@ -26,7 +26,7 @@ public class Associations {
 	 */
 	public static List<Rule> associate(Query query, Instances insts) {		
 		// randomly select subset of size 25% of original dataset
-		Instances D  = new Instances(insts, insts.numInstances());
+		Instances D  = new Instances(insts);
 		int toremove = (int)(insts.numInstances()*0.75);
 		Random rand = new Random(100);
 		for(int i=0; i<toremove; i++) {
@@ -41,13 +41,14 @@ public class Associations {
 				tree.buildClassifier(thresholded);
 				System.out.println("Generating rules for: "+conj);
 				List<Rule> r = extractRules(thresholded, tree, conj);
-				System.out.println("Extracted rules: "+r.toString());
+				//System.out.println("Extracted rules: "+r.toString());
 				rules = rules.append(r);
 			} catch (Exception e) {
 				// We have no idea what it is and we can't do anything ab
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Extracted rules: "+rules);
 		return rules;
 	}
 	
@@ -90,7 +91,7 @@ public class Associations {
 		List<String> lines = List.iterableList(
 				Arrays.asList(tree.toString().split("\n")))
 				.drop(3); // Skip the header
-		System.out.println(tree);
+		//System.out.println(tree);
 		
 		return extractRules(insts, lines, List.nil(), conj);
 	}
