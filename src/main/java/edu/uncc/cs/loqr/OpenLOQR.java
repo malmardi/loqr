@@ -35,6 +35,8 @@ public class OpenLOQR {
 		Discretize disc = new Discretize();
 		Instances insts = DataSource.read(filename);
 		insts.setClassIndex(insts.attribute("class").index());
+		disc.setInputFormat(insts);
+		//insts = Filter.useFilter(insts, disc);		
 		
 		// get query from user
 		Scanner in = new Scanner(System.in);
