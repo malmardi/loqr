@@ -30,16 +30,15 @@ public class Associations {
 				J48 tree = new J48();
 				Instances thresholded = applyConjunct(conj, insts);
 				tree.buildClassifier(thresholded);
-				System.out.println(tree.prefix());
-				rules = rules.append(extractRules(thresholded, tree, conj));
-				
-				//System.out.println(tree.toSource("Associations"));
+				System.out.println("Generating rules for: "+conj);
+				List<Rule> r = extractRules(thresholded, tree, conj);
+				System.out.println("Extracted rules: "+r.toString());
+				rules = rules.append(r);
 			} catch (Exception e) {
 				// We have no idea what it is and we can't do anything ab
 				e.printStackTrace();
 			}
 		}
-		System.out.println(rules);
 		return rules;
 	}
 	

@@ -1,5 +1,7 @@
 package edu.uncc.cs.loqr;
 
+import java.util.Scanner;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,20 +28,22 @@ public class OpenLOQR {
 			System.exit(1);
 		}
 		
-		// Open, load and discretize the database
-		Discretize disc = new Discretize();
+		// Open, load the database
 		Instances insts = DataSource.read(args[0]);
 		insts.setClassIndex(insts.attribute("class").index());
-		disc.setInputFormat(insts);
-		//insts = Filter.useFilter(insts, disc);
 		
+		// get query from user
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter your query (e.g. [preg<=4]^[plas<=20]: ");
+		String query = in.next();
+		Query q = Query.parse(query, insts);
 		
-		//Query q = new Query(new Conjunct(preg, Op.LT, 4));
-		Query q = Query.parse("[preg<=4]", insts);
-		// Execute a relaxed query against the database
-		Instances results = Search.relaxed(q, insts);
+		// execute query against the database, relax if needed
+		Instances results = Search.execute(q, insts);
 		
 		// Tell the user the results
-		System.out.println(results);
+		if(results.numInstances()>0) {
+			System.out.println(results);
+		}
 	}
 }

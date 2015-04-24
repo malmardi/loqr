@@ -40,31 +40,35 @@ public class Search {
 	 * @param rules
 	 * @return
 	 */
-	public static Instances relaxed(Query Q, Instances insts) {
+	public static Instances execute(Query Q, Instances insts) {
 
-		// Check if the query fails
+		// check if the query fails
 		Instances results = rigid(Q, insts);
 		if(results.numInstances()==0) {
-			// Generate rules from the database
+			// generate rules from the database
 			List<Rule> rules = Associations.associate(Q, insts);
-			
-			List<Query> Qs = List.nil();
-			for(Rule r : rules) {
-				Qs = Qs.cons(new Query(r.antecedents));
+			if(rules.length()>0) {
+				List<Query> Qs = List.nil();
+				for(Rule r : rules) {
+					Qs = Qs.cons(new Query(r.antecedents));
+				}
+				
+				// get nearest query to original query
+				Query Qr = Query.nearest(Q, Qs, insts);
+				System.out.println("Nearest rule: "+Qr.conjuncts);
+				
+				// Relax
+				Query relaxed = Query.relax(Q, Qr);
+				System.out.println("Relaxed query: "+relaxed.conjuncts);
+				/*
+				 * TODO: make required relaxation to original query constraints using nearest rule
+				 */
+				
+				results = rigid(relaxed, insts);
 			}
-			
-			// get nearest query to original query
-			Query Qr = Query.nearest(Q, Qs, insts);
-			System.out.println(Qr.conjuncts.toString());
-			
-			// Relax
-			Query relaxed = Query.relax(Q, Qr);
-			System.out.println(relaxed.conjuncts.toString());
-			/*
-			 * TODO: make required relaxation to original query constraints using nearest rule
-			 */
-			
-			results = rigid(relaxed, insts);
+			else {
+				System.out.println("No rules found to relax this query.");
+			}
 		}
 		
 		return results;
