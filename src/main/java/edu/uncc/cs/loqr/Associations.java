@@ -1,6 +1,7 @@
 package edu.uncc.cs.loqr;
 
 import java.util.Arrays;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,12 +24,20 @@ public class Associations {
 	 * @param insts
 	 * @return
 	 */
-	public static List<Rule> associate(Query query, Instances insts) {
+	public static List<Rule> associate(Query query, Instances insts) {		
+		// randomly select subset of size 25% of original dataset
+		Instances D  = new Instances(insts);
+		int toremove = (int)(insts.numInstances()*0.25);
+		Random rand = new Random(100);
+		for(int i=0; i<toremove; i++) {
+			D.delete(rand.nextInt(D.numInstances()));
+		}
+		
 		List<Rule> rules = List.nil();
 		for (Conjunct conj : query.conjuncts) {
 			try {
 				J48 tree = new J48();
-				Instances thresholded = applyConjunct(conj, insts);
+				Instances thresholded = applyConjunct(conj, D);
 				tree.buildClassifier(thresholded);
 				System.out.println("Generating rules for: "+conj);
 				List<Rule> r = extractRules(thresholded, tree, conj);
