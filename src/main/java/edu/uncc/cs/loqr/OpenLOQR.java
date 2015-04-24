@@ -31,12 +31,8 @@ public class OpenLOQR {
 			filename = args[0];
 		}
 		
-<<<<<<< HEAD
-		// Open, load the database
-=======
 		// Open, load and discretize the database
 		Discretize disc = new Discretize();
->>>>>>> b01d87deb523820589075347df713af394a111a3
 		Instances insts = DataSource.read(filename);
 		insts.setClassIndex(insts.attribute("class").index());
 		
