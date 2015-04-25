@@ -4,7 +4,7 @@ An implementation of [Muslea's LOQR algorithm](http://webpages.uncc.edu/ras/Musl
 ## Running the Project
 
 ### The easy way:
-- Download the [Jar](https://www.dropbox.com/s/rga15aw1r4uxwen/loqr.jar?dl=0) and the [target data](https://github.com/SeanTater/loqr/raw/master/diabetes.arff) into the same directory
+- Download the [Jar](https://drive.google.com/file/d/0B2p-nOzrZclTY2kyUlhlVm5ySVE/view) and the [target data](https://github.com/SeanTater/loqr/raw/master/diabetes.arff) into the same directory
 - Open a terminal in the same directory, and run the jar using Java 8 (version is importrant!): `java -jar loqr.jar`
 
 ### The harder way
